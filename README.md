@@ -6,7 +6,7 @@
 0             1      156     311        343
                    (79872) (159232)   (175616)
 
-22 --> final do FAT 1
+#22 --> final do FAT 1
 FAT1 termina 155, logo FAT2 inciia em 156
 156*512 = 79872
 
