@@ -3,109 +3,118 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package so_fat16;
-
 /**
  *
  * @author macedo
  */
 public class fat_BS {
-    public byte[] bootjmp = new byte[3];
-    public byte[] oem_name = new byte[8];
-    public short bytes_per_sector;
-    public byte sectors_per_cluster;
-    public short reserved_sector_count;
-    public byte table_count;
-    public short root_entry_count;
-    public short total_sectors_16;
-    public byte media_type;
-    public short table_size_16;
-    public short sectors_per_track;
-    public short head_side_count;
-    public int hidden_sector_count;
-    public int total_sectors_32;
-    public byte[] extended_section =  new byte[54];
+    public short[] bootjmp = new short[3];   //1..3
+    public short[] oem_name = new short[8];  //3..8
+    public int bytes_per_sector;             //11
+    public short sectors_per_cluster;        //13
+    public int reserved_sector_count;        //14
+    public short table_count;                //16
+    public int root_entry_count;             //17
+    public int total_sectors_16;             //22
+    public char media_type;                 //21
+    public long table_size_16;               //total_sectores_16*bytes_per_sector
+    public int sectors_per_track;
+    public int head_side_count;
+    public long hidden_sector_count;
+    public long total_sectors_32;
+    public long[] extended_section =  new long[54];
 
-    public byte[] getBootjmp() {
+    public short[] getBootjmp() {
         return bootjmp;
     }
 
-    public void setBootjmp(byte[] bootjmp) {
-        this.bootjmp = bootjmp;
+    public void setBootjmp(short[] bootjmp) {
+        for(int i = 0; i < 3; i++){
+            this.bootjmp[i] = bootjmp[i];
+        }
     }
 
-    public byte[] getOem_name() {
+    public short[] getOem_name() {
         return oem_name;
     }
 
-    public void setOem_name(byte[] oem_name) {
-        this.oem_name = oem_name;
+    public void setOem_name(short[] oem_name) {
+        for(int i = 0; i < 11; i++){
+            if(i > 2){
+                this.oem_name[i-3] = oem_name[i];
+            }
+        }
     }
 
-    public short getBytes_per_sector() {
+    public int getBytes_per_sector() {
         return bytes_per_sector;
     }
 
-    public void setBytes_per_sector(short bytes_per_sector) {
-        this.bytes_per_sector = bytes_per_sector;
+    public void setBytes_per_sector(short[] bts) {
+        short aux = (short)bts[12];
+        aux <<= 8;
+        this.bytes_per_sector = (short)(aux | bts[11]);
     }
 
-    public byte getSectors_per_cluster() {
+    public short getSectors_per_cluster() {
         return sectors_per_cluster;
     }
 
-    public void setSectors_per_cluster(byte sectors_per_cluster) {
-        this.sectors_per_cluster = sectors_per_cluster;
+    public void setSectors_per_cluster(short[] stp) {
+        this.sectors_per_cluster = stp[13];
     }
 
-    public short getReserved_sector_count() {
+    public int getReserved_sector_count() {
         return reserved_sector_count;
     }
 
-    public void setReserved_sector_count(short reserved_sector_count) {
-        this.reserved_sector_count = reserved_sector_count;
+    public void setReserved_sector_count(short[] rsc) {
+        short aux = (short)rsc[15];
+        aux <<= 8;
+        this.reserved_sector_count = (short)(aux | rsc[14]);
     }
 
-    public byte getTable_count() {
+    public short getTable_count() {
         return table_count;
     }
 
-    public void setTable_count(byte table_count) {
-        this.table_count = table_count;
+    public void setTable_count(short[] tc) {
+        this.table_count = tc[16];
     }
 
-    public short getRoot_entry_count() {
+    public int getRoot_entry_count() {
         return root_entry_count;
     }
 
-    public void setRoot_entry_count(short root_entry_count) {
-        this.root_entry_count = root_entry_count;
+    public void setRoot_entry_count(short[] rec) {
+        short aux = (short)rec[18];
+        aux <<= 8;
+        this.root_entry_count = (short)(aux | rec[17]);
     }
 
-    public short getTotal_sectors_16() {
+    public int getTotal_sectors_16() {
         return total_sectors_16;
     }
 
-    public void setTotal_sectors_16(short total_sectors_16) {
-        this.total_sectors_16 = total_sectors_16;
+    public void setTotal_sectors_16(short[] ts) {
+        short aux = (short)ts[23];
+        aux <<= 8;
+        this.total_sectors_16 = (short)(aux | ts[22]);
     }
 
-    public byte getMedia_type() {
+    public int getMedia_type() {
         return media_type;
     }
 
-    public void setMedia_type(byte media_type) {
-        this.media_type = media_type;
+    public void setMedia_type(short[] mt) {
+        this.media_type = (char)mt[21];
     }
 
-    public short getTable_size_16() {
-        return table_size_16;
+    public long getTable_size_16() {
+        return (long)(total_sectors_16*bytes_per_sector);
     }
 
-    public void setTable_size_16(short table_size_16) {
-        this.table_size_16 = table_size_16;
-    }
-
-    public short getSectors_per_track() {
+    public int getSectors_per_track() {
         return sectors_per_track;
     }
 
@@ -113,7 +122,7 @@ public class fat_BS {
         this.sectors_per_track = sectors_per_track;
     }
 
-    public short getHead_side_count() {
+    public int getHead_side_count() {
         return head_side_count;
     }
 
@@ -121,7 +130,7 @@ public class fat_BS {
         this.head_side_count = head_side_count;
     }
 
-    public int getHidden_sector_count() {
+    public long getHidden_sector_count() {
         return hidden_sector_count;
     }
 
@@ -129,7 +138,7 @@ public class fat_BS {
         this.hidden_sector_count = hidden_sector_count;
     }
 
-    public int getTotal_sectors_32() {
+    public long getTotal_sectors_32() {
         return total_sectors_32;
     }
 
@@ -137,12 +146,12 @@ public class fat_BS {
         this.total_sectors_32 = total_sectors_32;
     }
 
-    public byte[] getExtended_section() {
+    public long[] getExtended_section() {
         return extended_section;
     }
 
-    public void setExtended_section(byte[] extended_section) {
-        this.extended_section = extended_section;
+    public void setExtended_section(short[] extended_section) {
+        this.extended_section = Short.toUnsignedLong(extended_section);
     }
     
     
