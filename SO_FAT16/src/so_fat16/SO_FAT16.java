@@ -39,7 +39,7 @@ public class SO_FAT16 {
             
             fat.setTotal_sectors_16(strShort);
             
-            fat.setMedia_type(strShort);
+            fat.setTotal_sector(strShort);
             
             for(int i = 0; i < fat.getBootjmp().length; i++){
                 System.out.println(fat.getBootjmp()[i]);
@@ -68,13 +68,14 @@ public class SO_FAT16 {
             System.out.println("total sectors 16");
             System.out.println(fat.getTotal_sectors_16());
             
-            System.out.println("Media type");
-            System.out.println(fat.getMedia_type());
-            
             System.out.println("Table size 16");
             System.out.println(fat.getTable_size_16());
             
+            System.out.println("Total sectors");
+            System.out.println(fat.getTotal_sector());
             
+            System.out.println("Init root dir");
+            System.out.println(fat.getInit_root_dir());
         }else{
             System.out.println("Erro: Nenhum arquivo indicado!");
         }

@@ -10,20 +10,16 @@ package so_fat16;
 public class fat_BS {
     public short[] bootjmp = new short[3];   //1..3
     public short[] oem_name = new short[8];  //3..8
-    public int bytes_per_sector;             //11
-    public short sectors_per_cluster;        //13
-    public int reserved_sector_count;        //14
-    public short table_count;                //16
-    public int root_entry_count;             //17
-    public int total_sectors_16;             //22
-    public char media_type;                 //21
+    public int bytes_per_sector;             //11 2
+    public short sectors_per_cluster;        //13 1
+    public int reserved_sector_count;        //14 2
+    public short table_count;                //16 1
+    public int root_entry_count;             //17 2
+    public int total_sectors_16;             //22 2
     public long table_size_16;               //total_sectores_16*bytes_per_sector
-    public int sectors_per_track;
-    public int head_side_count;
-    public long hidden_sector_count;
-    public long total_sectors_32;
-    public long[] extended_section =  new long[54];
-
+    public int total_sector;                 //19 2
+    public long init_root_dir;
+    
     public short[] getBootjmp() {
         return bootjmp;
     }
@@ -51,9 +47,9 @@ public class fat_BS {
     }
 
     public void setBytes_per_sector(short[] bts) {
-        short aux = (short)bts[12];
+        long aux = bts[12];
         aux <<= 8;
-        this.bytes_per_sector = (short)(aux | bts[11]);
+        this.bytes_per_sector = (int) (aux | bts[11]);
     }
 
     public short getSectors_per_cluster() {
@@ -69,9 +65,9 @@ public class fat_BS {
     }
 
     public void setReserved_sector_count(short[] rsc) {
-        short aux = (short)rsc[15];
+        long aux = rsc[15];
         aux <<= 8;
-        this.reserved_sector_count = (short)(aux | rsc[14]);
+        this.reserved_sector_count = (int) (aux | rsc[14]);
     }
 
     public short getTable_count() {
@@ -87,9 +83,9 @@ public class fat_BS {
     }
 
     public void setRoot_entry_count(short[] rec) {
-        short aux = (short)rec[18];
+        long aux = rec[18];
         aux <<= 8;
-        this.root_entry_count = (short)(aux | rec[17]);
+        this.root_entry_count = (int) (aux | rec[17]);
     }
 
     public int getTotal_sectors_16() {
@@ -97,62 +93,26 @@ public class fat_BS {
     }
 
     public void setTotal_sectors_16(short[] ts) {
-        short aux = (short)ts[23];
+        long aux = ts[23];
         aux <<= 8;
-        this.total_sectors_16 = (short)(aux | ts[22]);
-    }
-
-    public int getMedia_type() {
-        return media_type;
-    }
-
-    public void setMedia_type(short[] mt) {
-        this.media_type = (char)mt[21];
+        this.total_sectors_16 = (int)(aux | ts[22]);
     }
 
     public long getTable_size_16() {
         return (long)(total_sectors_16*bytes_per_sector);
     }
 
-    public int getSectors_per_track() {
-        return sectors_per_track;
+    public int getTotal_sector() {
+        return total_sector;
     }
 
-    public void setSectors_per_track(short sectors_per_track) {
-        this.sectors_per_track = sectors_per_track;
+    public void setTotal_sector(short[] ts) {
+        long aux = ts[20];
+        aux <<= 8;
+        this.total_sector = (int) (aux | ts[19]);
     }
 
-    public int getHead_side_count() {
-        return head_side_count;
+    public long getInit_root_dir() {
+        return reserved_sector_count*bytes_per_sector+total_sectors_16*table_count*bytes_per_sector;
     }
-
-    public void setHead_side_count(short head_side_count) {
-        this.head_side_count = head_side_count;
-    }
-
-    public long getHidden_sector_count() {
-        return hidden_sector_count;
-    }
-
-    public void setHidden_sector_count(int hidden_sector_count) {
-        this.hidden_sector_count = hidden_sector_count;
-    }
-
-    public long getTotal_sectors_32() {
-        return total_sectors_32;
-    }
-
-    public void setTotal_sectors_32(int total_sectors_32) {
-        this.total_sectors_32 = total_sectors_32;
-    }
-
-    public long[] getExtended_section() {
-        return extended_section;
-    }
-
-    public void setExtended_section(short[] extended_section) {
-        this.extended_section = Short.toUnsignedLong(extended_section);
-    }
-    
-    
 }
