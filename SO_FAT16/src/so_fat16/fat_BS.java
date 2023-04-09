@@ -19,6 +19,7 @@ public class fat_BS {
     public long table_size_16;               //total_sectores_16*bytes_per_sector
     public int total_sector;                 //19 2
     public long init_root_dir;
+    public int init_data;
     
     public short[] getBootjmp() {
         return bootjmp;
@@ -114,5 +115,9 @@ public class fat_BS {
 
     public long getInit_root_dir() {
         return reserved_sector_count*bytes_per_sector+total_sectors_16*table_count*bytes_per_sector;
+    }
+
+    public int getInit_data() {
+        return (int) (root_entry_count*32+(reserved_sector_count*bytes_per_sector+total_sectors_16*table_count*bytes_per_sector));
     }
 }

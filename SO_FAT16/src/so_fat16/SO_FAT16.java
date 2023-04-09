@@ -47,23 +47,58 @@ public class SO_FAT16 {
             
             ArrayList<oitoDot3> listOf8dot3 = new ArrayList<oitoDot3>();
                         
-            getRootDir(fat, strShort, listOf8dot3);
+            int desloc = (int)fat.getInit_root_dir();
             
-            while(true){
-                String readed = read.next();
-                readed = readed.toLowerCase();
-                if(readed.equals("ls")){
-                    ls(listOf8dot3);
-                }
-            }
+            cd(fat, strShort, listOf8dot3, desloc);
+            
+            cdAndLsandCat(listOf8dot3, fat, strShort );
             
         }else{
             System.out.println("Erro: Nenhum arquivo indicado!");
         }
     }
     
+    static void cdAndLsandCat(ArrayList<oitoDot3> listOf8dot3, fat_BS fat, short[] strShort){
+        while(true){
+            String readed = read.nextLine();
+            readed = readed.toUpperCase();
+            if(readed.equals("LS")){
+                ls(listOf8dot3);
+            }else if(readed.length() > 2 && readed.substring(0, 3).contains("CD ") &&
+                     !readed.contains(".")){
+                String nmExt = readed.substring(3, readed.length());
+
+                int desloc = 0;
+                int ttt = 0;
+                for(int i = 0; i < listOf8dot3.size(); i++){
+                    String convNm = new String();
+                    for(int j = 0; j < listOf8dot3.get(i).getName().length; j++){
+                        convNm += (char) listOf8dot3.get(i).getName()[j];
+                    }
+                    
+                    if(convNm.substring(0, convNm.length()).contains(nmExt)){
+                        desloc = fat.getInit_data()+((listOf8dot3.get(i).getFirst_cluster()-2)*
+                                 fat.getSectors_per_cluster()*fat.getBytes_per_sector());
+                        cd(fat, strShort, listOf8dot3, desloc);
+                        break;
+                    }else{
+                        ttt++;
+                    }
+                }
+                if(ttt == listOf8dot3.size()){
+                    System.out.println("Este diretorio nao existe");
+                    ttt = 0;
+                }
+            }
+            if(readed.contains(".")){
+                System.out.println("Impossivel usar cd em arquivo");
+            }
+        }
+    }
+    
     static void ls(ArrayList<oitoDot3> oit){
         for(int i = 0; i < oit.size(); i++){
+            System.out.println("size =====" +oit.size());
             System.out.println("Name");
             String name = new String();
             for(int j = 0; j < oit.get(i).getName().length; j++){
@@ -90,11 +125,9 @@ public class SO_FAT16 {
         }
     }
     
-    static void getRootDir(fat_BS fat, short[] strShort, ArrayList<oitoDot3> listOf8dot3){        
-        int desloc = (int)fat.getInit_root_dir();
-            
+    static void cd(fat_BS fat, short[] strShort, ArrayList<oitoDot3> listOf8dot3, int desloc){
         int aux = 0;
-        
+        System.out.println("desloc ===="+desloc);
         while(strShort[desloc] != 0 && aux <= fat.getRoot_entry_count()){
             if(strShort[desloc] != 229 && 
                strShort[desloc+11] != 15){
@@ -117,6 +150,7 @@ public class SO_FAT16 {
                 aux++;
             }
         }
+        System.out.println("desloc fi ===="+desloc);
     }
     
     static void debug(fat_BS fat, oitoDot3 oit){
