@@ -63,32 +63,30 @@ public class oitoDot3 {
     }
 
     public void setSize(short[] size, int desloc) {
-        this.size = size[desloc+28];
+        long aux = size[desloc+31];
+        aux <<= 24;
+        long aux1 = size[desloc+30];
+        aux1 <<= 16;        
+        long aux2 = (aux | aux1);
+        aux = size[desloc+29];
+        aux <<= 8;
+        aux1 = (aux | size[desloc+28]);
+        this.size = (int)(aux2 | aux1);
     }   
     
     public String getNameExt(){
-        boolean pst = false;
-        for(int i = 0; i < name.length; i++){
-            if(name[i] != ' '){
-                nameExt += (char)name[i];
-            }
+        //String name = getName();
+        String name = new String();
+        for(int j = 0; j < getName().length; j++){
+            name += (char)getName()[j];
         }
-        for(int i = 0; i < 8; i++){
-            if(name[i] == ' '){
-                pst = true;
-            }
+        String ext = new String();
+        for(int k = 0; k < getExt().length; k++){
+            ext += (char)getExt()[k];
         }
-        if(ext[0] != '.' && ext[1] != '.' && ext[2] == ' '){
-            pst = true;
-        }else if(ext[0] != '.' && ext[1] == ' ' && ext[2] == ' '){
-            pst = true;
-        }
-
-        if(pst == true){
-            nameExt += ".";
-        }
-        for(int i = 0; i < ext.length; i++){
-            nameExt += (char)ext[i];
+        if(getExt().length > 0){
+            nameExt += name;
+            nameExt += ext;
         }
         return nameExt;
     }
