@@ -84,9 +84,10 @@ public class oitoDot3 {
         for(int k = 0; k < getExt().length; k++){
             ext += (char)getExt()[k];
         }
-        if(getExt().length > 0){
-            nameExt += name;
-            nameExt += ext;
+        if(getExt()[0] != 0 && getExt()[1] != 0 && getExt()[2] != 0){
+            nameExt = name.concat(".").concat(ext);
+        }else{
+            nameExt = name;
         }
         return nameExt;
     }

@@ -102,24 +102,64 @@ public class SO_FAT16 {
                 }
             }else if(readed.length() > 3 && readed.substring(0, 4).contains("CAT ") && readed.contains(".")){
                 String nmExt = readed.substring(4, readed.length());
-                int cluster = 0;
-                int nextCluster = 0;
-                int clusterSize = 0;
-                clusterSize = fat.getSectors_per_cluster()*fat.getBytes_per_sector();
-                for(int i = 0; i < listOf8dot3.size(); i++){//controla o nome que vai pegar
-                    if(nmExt == listOf8dot3.get(i).getNameExt())){
+                
+                int posCluster = 0;
+                int clusterSize = fat.getSectors_per_cluster()*fat.getBytes_per_sector();
+                
+                for(int i = 0; i < listOf8dot3.size(); i++){
+                    posCluster = listOf8dot3.get(i).getFirst_cluster()*2+fat.getReserved_sector_count()*fat.getBytes_per_sector();
+                  
+                    String ext = new String();
+                    for(int k = 0; k < listOf8dot3.get(i).getExt().length; k++){
+                        if(listOf8dot3.get(i).getExt()[k] != 0){
+                            ext += (char)listOf8dot3.get(i).getExt()[k];
+                        }
+                    }
+                    
+                    String name = new String();
+                    for(int j = 0; j < listOf8dot3.get(i).getName().length; j++){
+                        if(listOf8dot3.get(i).getName()[j] != 0){
+                            name += (char)listOf8dot3.get(i).getName()[j];
+                        }
+                    }
+                    
+                    System.out.println("nmExt ="+nmExt);
+                    System.out.println("NameExt ="+listOf8dot3.get(i).getNameExt());
+                    //System.out.println(name.contains(nmExt.substring(0, nmExt.length()-4)));
+                    //System.out.println(ext.contains(nmExt.substring(nmExt.length()-3, nmExt.length())));
+                    
+                    String itName = name.concat(".").concat(ext);
+                    
+                    int desloc = fat.getInit_data()+((listOf8dot3.get(i).getFirst_cluster()-2)*
+                                 fat.getSectors_per_cluster()*fat.getBytes_per_sector());
+                    
+                    if(nmExt.equals(itName)){
                         while(true){
-                            cluster = listOf8dot3.get(i).getFirst_cluster()*2+fat.getReserved_sector_count()*fat.getBytes_per_sector();
-
-                            nextCluster = strShort[cluster];
+                            //System.out.println("aqui");
+                            System.out.println(posCluster);
+                            System.out.println(strShort[posCluster]);
+                            long  clt = strShort[posCluster+1];
+                            clt <<= 8;
+                            clt |= strShort[posCluster];
+                            System.out.println(clt);
+                            if(clt >= 0xFFF8){
+                                if(fat.getInit_data()+((listOf8dot3.get(i).getFirst_cluster()-2)*fat.getSectors_per_cluster()*fat.getBytes_per_sector()) != desloc){
+                                    for(int x = 0; x < clusterSize; x++){
+                                        System.out.print((char)strShort[desloc+x]);
+                                    } 
+                                }
+                                break;
+                            }else{
+                                for(int x = 0; x < clusterSize; x++){
+                                    System.out.print((char)strShort[desloc+x]);
+                                }
+                                System.out.println("");
+                                //System.out.println("desloc init ="+desloc);
+                                desloc = fat.getInit_data()+(((int)clt-2)* fat.getSectors_per_cluster()*fat.getBytes_per_sector());
+                                //System.out.println("desloc ="+desloc);
+                                posCluster = strShort[posCluster]*2+fat.getReserved_sector_count()*fat.getBytes_per_sector();
+                            }
                         }
-                        for(int j = 0; j < clusterSize; j++){
-                            //strShort[cluster]
-                        }
-
-                        //strShort[cluster];
-                        System.out.println(cluster);
-                        System.out.println(clusterSize);
                     }
                 }
             }
@@ -130,7 +170,7 @@ public class SO_FAT16 {
     }
     
     static void ls(ArrayList<oitoDot3> oit){
-        System.out.println("Qunatidades de entidades no diretorio atual : "+ oit.size());
+        System.out.println("Quantidades de entidades no diretorio atual : "+ oit.size());
         for(int i = 0; i < oit.size(); i++){
             System.out.println("-------------------------------------------------------------------------------------------");
             System.out.print("| Name : ");
