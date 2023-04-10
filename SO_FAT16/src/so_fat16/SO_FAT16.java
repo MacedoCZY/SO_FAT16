@@ -65,9 +65,9 @@ public class SO_FAT16 {
             if(readed.equals("LS")){
                 ls(listOf8dot3);
             }else if(readed.length() > 2 && readed.substring(0, 3).contains("CD ") &&
-                     !readed.contains(".")){
+                     (!readed.contains("."))| readed.equals("CD .") | readed.equals("CD ..")){
                 String nmExt = readed.substring(3, readed.length());
-
+                System.out.println("entro");
                 int desloc = 0;
                 int ttt = 0;
                 for(int i = 0; i < listOf8dot3.size(); i++){
@@ -77,9 +77,20 @@ public class SO_FAT16 {
                     }
                     
                     if(convNm.substring(0, convNm.length()).contains(nmExt)){
-                        desloc = fat.getInit_data()+((listOf8dot3.get(i).getFirst_cluster()-2)*
+                        if(listOf8dot3.get(i).getFirst_cluster() == 0){
+                            desloc = (int)fat.getInit_root_dir();
+                        }else{
+                            desloc = fat.getInit_data()+((listOf8dot3.get(i).getFirst_cluster()-2)*
                                  fat.getSectors_per_cluster()*fat.getBytes_per_sector());
+                        }
+                        listOf8dot3.removeAll(listOf8dot3);
                         cd(fat, strShort, listOf8dot3, desloc);
+                        System.out.println("Init data ="+fat.getInit_data());
+                        System.out.println("First Cluster ="+listOf8dot3.get(i).getFirst_cluster());
+                        System.out.println("Sectors per cluster ="+fat.getSectors_per_cluster());
+                        System.out.println("Bytes per sector ="+fat.getBytes_per_sector());
+                        System.out.println("Conta ="+(listOf8dot3.get(i).getFirst_cluster()-2)*
+                                 fat.getSectors_per_cluster()*fat.getBytes_per_sector());
                         break;
                     }else{
                         ttt++;
@@ -90,7 +101,7 @@ public class SO_FAT16 {
                     ttt = 0;
                 }
             }
-            if(readed.contains(".")){
+            if(readed.contains(".") && !readed.equals("CD .") && !readed.equals("CD ..")){
                 System.out.println("Impossivel usar cd em arquivo");
             }
         }
