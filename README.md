@@ -1,4 +1,4 @@
-# SO_FAT16
+# SO_FAT16 EX:
 
 
 - bytes por setor = 512
