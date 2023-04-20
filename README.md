@@ -1,4 +1,10 @@
 # SO_FAT16
+|-------------|-------|-------|----------|------|
+| BOOT RECORD | FAT 1 | FAT 2 | ROOT DIR | DATA |
+|-------------|-------|-------|----------|------|
+^             ^       ^       ^          ^      ^
+0             1      156     311        343
+                   (79872) (159232)   (175616)
 
 #22 --> final do FAT 1
 FAT1 termina 155, logo FAT2 inciia em 156
@@ -16,6 +22,16 @@ cada entrada no diretório raiz tem 32 bytes dado o padrão 8.3
 valor é armazenado na memória em little indian, portanto:
 00|02 --> se lê --> 02|00
 
+8.3          BR
+    |-----|--11--|
+    |-----|------|
+ E5 | LFN | 0x0F |
+    |-----|------|
+    | LFN | 0x0F |
+    |-----|------|
+    | 8.3 | 0x10 |
+    |     | 0x20 |
+    |-----|------|
 LFN se estiver marcado com E5 ele será excluído
 1 - Atributo(11) = 0xF (LFN) pala para 21
 Cada linha no hexed tem 16 bytes logo uma entrada são 2 linhas
