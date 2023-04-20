@@ -1,14 +1,5 @@
 # SO_FAT16
-|-------------|-------|-------|----------|------|
-| BOOT RECORD | FAT 1 | FAT 2 | ROOT DIR | DATA |
-|-------------|-------|-------|----------|------|
-^             ^       ^       ^          ^      ^
-0             1      156     311        343
-                   (79872) (159232)   (175616)
 
-#22 --> final do FAT 1
-FAT1 termina 155, logo FAT2 inciia em 156
-156*512 = 79872
 
 - bytes por setor = 512
 - setores-reservados = 1
@@ -22,16 +13,6 @@ cada entrada no diretório raiz tem 32 bytes dado o padrão 8.3
 valor é armazenado na memória em little indian, portanto:
 00|02 --> se lê --> 02|00
 
-8.3          BR
-    |-----|--11--|
-    |-----|------|
- E5 | LFN | 0x0F |
-    |-----|------|
-    | LFN | 0x0F |
-    |-----|------|
-    | 8.3 | 0x10 |
-    |     | 0x20 |
-    |-----|------|
 LFN se estiver marcado com E5 ele será excluído
 1 - Atributo(11) = 0xF (LFN) pala para 21
 Cada linha no hexed tem 16 bytes logo uma entrada são 2 linhas
@@ -54,15 +35,6 @@ O padrão da FAT é que se tem 00 não tem mais arquivos ali adiante e E5
 
 Cada entrada ocupa 2 bytes
 
-512 |----|
-   0|FFF8|
-   1|FFFF|
-   2|0000|
-   3|FFFF|
-    |....| posição*tamanhoDaEntrada+inicioDaTabela
-0x38|0039| (0x38)*2+512
-0x39|003A| (0x39)*2+512
-0x3A|FFFF| (0x3A)*2+512
 Apartir de FFF8 = Ultimo cluster
 0000 = Cluester livre
 
