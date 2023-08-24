@@ -1,5 +1,5 @@
 # SO_FAT16 EX:
-
+Sistema fat16 em java. Detalhes do funcionamento da fat16 a baixo, especificações retiradas do site: OsDev
 
 - bytes por setor = 512
 - setores-reservados = 1
