@@ -8,7 +8,7 @@ Detalhes do funcionamento da fat16 a baixo, especificações retiradas do site: 
 - FAT2 é uma cópia da FAT1 logo os setores tem o mesmo tamanho
 
 Cada entrada no diretório raiz tem 32 bytes dado o padrão 8.3
-(512*32)/512= 32 setores ou 512*32=16384 deslocamento
+(512\*32)/512= 32 setores ou 512\*32=16384 deslocamento
 
 Valor é armazenado na memória em little indian, portanto:\
 00|02 --> se lê --> 02|00
@@ -42,14 +42,14 @@ Isso por causa que 0000 significa cluster livre
 
 Dado = 175616\
 O deslocamento do cluster da área de dados é sempre -2, visto que ele começa apartir\
-Cluster(56) = 56 - 2 = 54*512 = 27648+175616 = 203264\
-57-2 = 55*512 = 203776\
-58-2 = 56*512 = 204288\
-tamanhoDoAqrquivo-parteInteira(tamanhoDoArquivo/TamanhoDoCluster)*TamanhoDoCluster
+Cluster(56) = 56 - 2 = 54\*512 = 27648+175616 = 203264\
+57-2 = 55\*512 = 203776\
+58-2 = 56\*512 = 204288\
+tamanhoDoAqrquivo-parteInteira(tamanhoDoArquivo/TamanhoDoCluster)\*TamanhoDoCluster
 
 - número total de setores = 9C|40 (40000)
 
-encontrando o sub diretório 3-2 = 1*512 = 512+175616
+encontrando o sub diretório 3-2 = 1\*512 = 512+175616
 
 Nome = .\
 Ext = ___\
@@ -79,11 +79,11 @@ Tamanho = 00|00 04|4F
  3D = 61*2+512=634 00|3E\
  3E = 62*2+512=636 FF|FF
 
- 60-2=58*512=29696+175616=205312
+ 60-2=58\*512=29696+175616=205312
 
 
 achando SUB2\
-00|3B = 59-2 = 57*512 = 29184
+00|3B = 59-2 = 57\*512 = 29184
 
 Nome = .\
 Ext = __\
